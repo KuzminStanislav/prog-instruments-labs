@@ -97,3 +97,4 @@ def parse_args() -> TestConfig:
     test_time=args.test_time,
     wait_timeout=args.wait_timeout
 )
+
