@@ -7,15 +7,24 @@ from dataclasses import dataclass
 class TestConfig:
     """
     Load test config
-    :param url: site URL
-    :param rps: number of requests per second
-    :param test_time: test duration
-    :param wait_timeout: Timeout after test ending
     """
-    url: str
-    rps: int
-    test_time: int
-    wait_timeout: int
+    def __init__(
+            self, url: str, 
+            rps: int,
+            test_time: int,
+            wait_timeout: int
+            ):
+        """
+        Class initialization
+        :param url: site URL
+        :param rps: number of requests per second
+        :param test_time: test duration
+        :param wait_timeout: Timeout after test ending
+        """
+        url: str
+        rps: int
+        test_time: int
+        wait_timeout: int
 
 
     def total_requests(self) -> int:
