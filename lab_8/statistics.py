@@ -112,33 +112,33 @@ class TestStatistics:
         return dict(errors)
     
 
-    def format_status_code(code: Union[int, str]) -> str:
-        """
-        Format status code
-        :param code: Status code
-        :return: Formated status code
-        """
-        match code:
-            case 200:
-                return "200 OK"
-            case 301:
-                return "301 Redirect"
-            case 302:
-                return "302 Redirect"
-            case 404:
-                return "404 Not Found"
-            case 500:
-                return "500 Server Err"
-            case 'TIMEOUT':
-                return "Timeouts"
-            case 'CONNECTION_ERROR':
-                return "Connection Errors"
-            case 'OTHER_ERROR':
-                return "Other Errors"
-            case int(code) if 400 <= code < 500:
-                return f"{code} Client Error"
-            case int(code) if 500 <= code < 600:
-                return f"{code} Server Error"
-            case _:
-                return str(code)
+def format_status_code(code: Union[int, str]) -> str:
+    """
+    Format status code
+    :param code: Status code
+    :return: Formated status code
+    """
+    match code:
+        case 200:
+            return "200 OK"
+        case 301:
+            return "301 Redirect"
+        case 302:
+            return "302 Redirect"
+        case 404:
+            return "404 Not Found"
+        case 500:
+            return "500 Server Err"
+        case 'TIMEOUT':
+            return "Timeouts"
+        case 'CONNECTION_ERROR':
+            return "Connection Errors"
+        case 'OTHER_ERROR':
+            return "Other Errors"
+        case int(code) if 400 <= code < 500:
+            return f"{code} Client Error"
+        case int(code) if 500 <= code < 600:
+            return f"{code} Server Error"
+        case _:
+            return str(code)
 
