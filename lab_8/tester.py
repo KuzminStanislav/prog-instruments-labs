@@ -19,8 +19,8 @@ class LoadTester:
         :param config: Test config
         """
         self.config = config
-        self.results = list[RequestResult] = []
-        self.start_time = Optional[float] = None
+        self.results: list[RequestResult] = []
+        self.start_time: Optional[float] = None
         self.status_codes = Counter()
 
         self.timeout_errors = 0
@@ -107,7 +107,7 @@ class LoadTester:
         :param queue: Queue with id's
         """
         while True:
-            request_id = await queue.get()
+            request_id = await asyncio.wait_for(queue.get(), timeout = 1.0)
             if request_id is None:
                 queue.task_done()
                 break
@@ -124,7 +124,7 @@ class LoadTester:
         self._print_test_info()
         self.start_time = time.time()
 
-        connector = aiohttp.TCPConnector(limit = 0, limit_per_host = 0)
+        connector = aiohttp.TCPConnector(limit = 1000, limit_per_host = 1000)
         async with aiohttp.ClientSession(connector = connector) as session:
             queue = asyncio.Queue()
             workers = await self._start_workers(session, queue)
