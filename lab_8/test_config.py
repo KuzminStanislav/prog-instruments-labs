@@ -21,10 +21,10 @@ class TestConfig:
         :param test_time: test duration
         :param wait_timeout: Timeout after test ending
         """
-        url: str
-        rps: int
-        test_time: int
-        wait_timeout: int
+        self.url = url
+        self.rps = rps
+        self.test_time = test_time
+        self.wait_timeout = wait_timeout
 
 
     def total_requests(self) -> int:
