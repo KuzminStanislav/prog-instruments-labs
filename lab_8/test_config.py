@@ -27,6 +27,7 @@ class TestConfig:
         self.wait_timeout = wait_timeout
 
 
+    @property
     def total_requests(self) -> int:
         """
         Total requests of test
