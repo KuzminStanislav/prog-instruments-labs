@@ -51,10 +51,17 @@ class RequestResult:
     :param response_time: time of answer
     :param error: description of error 
     """
-    reques_id: int
-    status_code: Union[int, str]
-    response_time: float
-    error: Optional[str] = None
+    def __init__(
+            self,
+            request_id: int,
+            status_code: Union[int, str],
+            response_time: float,
+            error: Optional[str] = None
+        ):
+        self.request_id = request_id
+        self.status_code = status_code
+        self.response_time = response_time
+        self.error = error
 
 
 def parse_args() -> TestConfig:
