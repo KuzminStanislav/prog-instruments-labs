@@ -1,6 +1,6 @@
 from typing import Counter
 
-from statistics import TestStatistics, format_status_code
+from test_statistics import TestStatistics, format_status_code
 
 
 class ResultPrinter:

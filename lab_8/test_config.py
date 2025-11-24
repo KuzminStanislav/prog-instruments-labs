@@ -1,4 +1,4 @@
-from typing import Optional, Any, Union
+from typing import Optional, Union
 
 import argparse
 from dataclasses import dataclass

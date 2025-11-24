@@ -6,7 +6,7 @@ import aiohttp
 import asyncio
 
 from test_config import TestConfig, RequestResult
-from statistics import TestStatistics, format_status_code
+from test_statistics import TestStatistics, format_status_code
 
 
 class LoadTester:
@@ -41,11 +41,19 @@ class LoadTester:
         request_start = time.time()
 
         try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept': '*/*',
+            }
+
             async with session.get(
                 self.config.url,
-                timeout = aiohttp.ClientTimeout(total = self.config.wait_timeout)
+                timeout = aiohttp.ClientTimeout(total = self.config.wait_timeout),
+                headers = headers,
+                ssl = False
             ) as response:
                 response_time = (time.time() - request_start) * 1000
+                
 
                 result = RequestResult(
                     request_id = request_id,
@@ -124,8 +132,21 @@ class LoadTester:
         self._print_test_info()
         self.start_time = time.time()
 
-        connector = aiohttp.TCPConnector(limit = 1000, limit_per_host = 1000)
-        async with aiohttp.ClientSession(connector = connector) as session:
+        connector = aiohttp.TCPConnector(
+            limit=10,
+            limit_per_host=5,
+            verify_ssl=False,
+            use_dns_cache=True
+        )
+        timeout = aiohttp.ClientTimeout(total = self.config.wait_timeout)
+
+        async with aiohttp.ClientSession(
+            connector = connector,
+            timeout = timeout,
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+        ) as session:
             queue = asyncio.Queue()
             workers = await self._start_workers(session, queue)
             await self._distribute_requests(queue)
@@ -170,12 +191,13 @@ class LoadTester:
 
         request_id = 0
         end_time = self.start_time + self.config.test_time
+        total_req = self.config.total_requests
 
-        while time.time() < end_time and request_id < self.config.total_requests:
+        while time.time() < end_time and request_id < total_req:
             batch_start = time.time()
 
             for _ in range(requests_per_batch):
-                if request_id < self.config.total_requests:
+                if request_id < total_req:
                     await queue.put(request_id)
                     request_id += 1
 
