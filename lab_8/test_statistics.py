@@ -1,6 +1,6 @@
 from collections import Counter
 from typing import Optional, Union
-import statistics
+from statistics import mean, median
 
 from test_config import RequestResult
 
@@ -15,20 +15,18 @@ class TestStatistics:
         :param results: List of requests
         """
         self.results = results
-        self._response_times = Optional[list[float]] = None
 
 
+    @property
     def response_times(self) -> list[float]:
         """
         Response time of requests
         :return: Time list
         """
-        if self._response_times is None:
-            self._response_times = [
-                r.response_time for r in self.results 
-                if r.error is None and 200 <= r.status_code < 400
-            ]
-        return self._response_times
+        return [
+            r.response_time for r in self.results
+            if r.error is None and 200 <= r.status_code < 400
+        ]
     
 
     def get_request_summary(self) -> dict[str, int]:
@@ -80,8 +78,8 @@ class TestStatistics:
         return {
             'min': min(response_times),
             'max': max(response_times),
-            'mean': statistics.mean(response_times),
-            'median': statistics.median(response_times),
+            'mean': mean(response_times),
+            'median': median(response_times),
             'p75': sorted_times[int(0.75 * n) - 1] if n > 0 else 0.0,
             'p90': sorted_times[int(0.90 * n) - 1] if n > 0 else 0.0,
             'p95': sorted_times[int(0.95 * n) - 1] if n > 0 else 0.0,
